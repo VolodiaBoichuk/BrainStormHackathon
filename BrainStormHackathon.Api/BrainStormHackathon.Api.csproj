@@ -13,4 +13,10 @@
       <ProjectReference Include="..\BrainStormHackathon.Services.Interfaces\BrainStormHackathon.Services.Interfaces.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <None Update="Data.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
 </Project>
