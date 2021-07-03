@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrainStormHackathon.Api", "BrainStormHackathon.Api\BrainStormHackathon.Api.csproj", "{CF0A2592-08FD-47CE-84E4-CA070C1E758F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrainStormHackathon.Services.Interfaces", "BrainStormHackathon.Services.Interfaces\BrainStormHackathon.Services.Interfaces.csproj", "{2D567BB3-1A92-4093-9B69-A75462ADADE5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrainStormHackathon.Application", "BrainStormHackathon.Application\BrainStormHackathon.Application.csproj", "{2F1B1286-BDD4-49D0-B33B-4D04A25EF01A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrainStormHackathon.Infrastructure", "BrainStormHackathon.Infrastructure\BrainStormHackathon.Infrastructure.csproj", "{3496C387-83A6-47B0-8228-FE53C975A838}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CF0A2592-08FD-47CE-84E4-CA070C1E758F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF0A2592-08FD-47CE-84E4-CA070C1E758F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF0A2592-08FD-47CE-84E4-CA070C1E758F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF0A2592-08FD-47CE-84E4-CA070C1E758F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D567BB3-1A92-4093-9B69-A75462ADADE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D567BB3-1A92-4093-9B69-A75462ADADE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D567BB3-1A92-4093-9B69-A75462ADADE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D567BB3-1A92-4093-9B69-A75462ADADE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F1B1286-BDD4-49D0-B33B-4D04A25EF01A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F1B1286-BDD4-49D0-B33B-4D04A25EF01A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F1B1286-BDD4-49D0-B33B-4D04A25EF01A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F1B1286-BDD4-49D0-B33B-4D04A25EF01A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3496C387-83A6-47B0-8228-FE53C975A838}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3496C387-83A6-47B0-8228-FE53C975A838}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3496C387-83A6-47B0-8228-FE53C975A838}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3496C387-83A6-47B0-8228-FE53C975A838}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
