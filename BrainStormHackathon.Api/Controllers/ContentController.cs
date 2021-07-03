@@ -14,7 +14,7 @@ namespace BrainStormHackathon.Api.Controllers
             _viewService = viewService;
         }
         
-        [HttpGet("/users/{userId}")]
+        [HttpGet("/users/{userId}/videos")]
         public async Task<IActionResult> GetContentByUserAsync([FromRoute] int userId, [FromQuery] string orderBy)
         {
             var result = await _viewService.SearchByUserIdAsync(userId, orderBy);
