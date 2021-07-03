@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using BrainStormHackathon.Application.Models;
 using BrainStormHackathon.Domain.Entities;
 using BrainStormHackathon.Services.Interfaces;
 using Neo4j.Driver;
-using Newtonsoft.Json;
 
 namespace BrainStormHackathon.Infrastructure.Services.Neo4J
 {
@@ -21,7 +19,7 @@ namespace BrainStormHackathon.Infrastructure.Services.Neo4J
 
         public async Task SeedAsync()
         {
-            var seedObject = await GetSeedObject();
+            var seedObject = await DataRegistry.GetDataAsync();
             
             await CreateUsers(seedObject.Users);
             await CreateVideos(seedObject.Videos);
@@ -36,17 +34,6 @@ namespace BrainStormHackathon.Infrastructure.Services.Neo4J
             await CreateRelationships(seedObject.FlowsToVideos);
         }
 
-        private async Task<SeedObject> GetSeedObject()
-        {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "Data.json");
-            if(!File.Exists(path)) throw new FileNotFoundException("Data.json");
-            
-            var content = await File.ReadAllTextAsync(path);
-
-            var result = JsonConvert.DeserializeObject<SeedObject>(content);
-            return result;
-        }
-
         private async Task CreateUsers(List<User> users)
         {
             var cypher = new StringBuilder()
@@ -55,18 +42,23 @@ namespace BrainStormHackathon.Infrastructure.Services.Neo4J
                 .AppendLine("SET u = user")
                 .ToString();
             
-            await ExecuteAsync(cypher, new Dictionary<string, object> {{"users", ParameterSerializer.ToDictionary(users)}});
+            await using var session = _driver.AsyncSession();
+            await session.RunAsync(cypher,
+                new Dictionary<string, object> {{"users", ParameterSerializer.ToDictionary(users)}});
         }
 
         private async Task CreateVideos(List<Video> videos)
         {
             var cypher = new StringBuilder()
                 .AppendLine("UNWIND $videos AS video")
-                .AppendLine("MERGE (v:video {name: video.name, id: video.id})")
+                .AppendLine("MERGE (v:Video {name: video.name, id: video.id})")
                 .AppendLine("SET v = video")
                 .ToString();
+
+            await using var session = _driver.AsyncSession();
             
-            await ExecuteAsync(cypher, new Dictionary<string, object> {{"videos", ParameterSerializer.ToDictionary(videos)}});
+            await session.RunAsync(cypher,
+                new Dictionary<string, object> {{"videos", ParameterSerializer.ToDictionary(videos)}});
         }
 
         private async Task CreateGroups(List<Group> groups)
@@ -77,7 +69,9 @@ namespace BrainStormHackathon.Infrastructure.Services.Neo4J
                 .AppendLine("SET g = group")
                 .ToString();
 
-            await ExecuteAsync(cypher, new Dictionary<string, object> {{"groups", ParameterSerializer.ToDictionary(groups)}});
+            await using var session = _driver.AsyncSession();
+            await session.RunAsync(cypher,
+                new Dictionary<string, object> {{"groups", ParameterSerializer.ToDictionary(groups)}});
         }
 
         private async Task CreateFlow(List<Flow> flows)
@@ -88,7 +82,8 @@ namespace BrainStormHackathon.Infrastructure.Services.Neo4J
                 .AppendLine("SET f = flow")
                 .ToString();
 
-            await ExecuteAsync(cypher, new Dictionary<string, object> {{"flows", ParameterSerializer.ToDictionary(flows)}});
+            await using var session = _driver.AsyncSession();
+            await session.RunAsync(cypher, new Dictionary<string, object> {{"flows", ParameterSerializer.ToDictionary(flows)}});
         }
 
         private async Task CreateRelationships(List<UserToVideo> relationships)
@@ -96,7 +91,7 @@ namespace BrainStormHackathon.Infrastructure.Services.Neo4J
             var cypher = new StringBuilder()
                 .AppendLine("UNWIND $relationships AS relationship")
                 .AppendLine("MATCH (u:User {id: relationship.userId}), (v:Video {id: relationship.videoId})")
-                .AppendLine("MERGE (v)-[r:ACTED_IN { roles: ['relationship.priority']}]->(u)")
+                .AppendLine("Create (v)-[r:ACTED_IN { roles: ['relationship.priority']}]->(u)")
                 .ToString();
             
             await ExecuteAsync(cypher, new Dictionary<string, object> {{"relationships", ParameterSerializer.ToDictionary(relationships)}});
@@ -107,7 +102,7 @@ namespace BrainStormHackathon.Infrastructure.Services.Neo4J
             var cypher = new StringBuilder()
                 .AppendLine("UNWIND $relationships AS relationship")
                 .AppendLine("MATCH (u:User {id: relationship.userId}), (g:Group {id: relationship.groupId})")
-                .AppendLine("MERGE (u)-[r:DIRECTED]->(g)")
+                .AppendLine("Create (u)-[r:DIRECTED]->(g)")
                 .ToString();
             
             await ExecuteAsync(cypher, new Dictionary<string, object> {{"relationships", ParameterSerializer.ToDictionary(relationships)}});
@@ -118,7 +113,7 @@ namespace BrainStormHackathon.Infrastructure.Services.Neo4J
             var cypher = new StringBuilder()
                 .AppendLine("UNWIND $relationships AS relationship")
                 .AppendLine("MATCH (u:User {id: relationship.userId}), (f:Flow {id: relationship.flowId})")
-                .AppendLine("MERGE (f)-[r:ACTED_IN { roles: ['relationship.priority']}]->(u)")
+                .AppendLine("Create (f)-[r:ACTED_IN { roles: ['relationship.priority']}]->(u)")
                 .ToString();
             
             await ExecuteAsync(cypher, new Dictionary<string, object> {{"relationships", ParameterSerializer.ToDictionary(relationships)}});
@@ -129,7 +124,7 @@ namespace BrainStormHackathon.Infrastructure.Services.Neo4J
             var cypher = new StringBuilder()
                 .AppendLine("UNWIND $relationships AS relationship")
                 .AppendLine("MATCH (g:Group {id: relationship.groupId}), (v:Video {id: relationship.videoId})")
-                .AppendLine("MERGE (v)-[r:ACTED_IN { roles: ['relationship.priority']}]->(g)")
+                .AppendLine("Create (v)-[r:ACTED_IN { roles: ['relationship.priority']}]->(g)")
                 .ToString();
             
             await ExecuteAsync(cypher, new Dictionary<string, object> {{"relationships", ParameterSerializer.ToDictionary(relationships)}});
@@ -140,7 +135,7 @@ namespace BrainStormHackathon.Infrastructure.Services.Neo4J
             var cypher = new StringBuilder()
                 .AppendLine("UNWIND $relationships AS relationship")
                 .AppendLine("MATCH (g:Group {id: relationship.groupId}), (f:Flow {id: relationship.flowId})")
-                .AppendLine("MERGE (f)-[r:ACTED_IN { roles: ['relationship.priority']}]->(g)")
+                .AppendLine("Create (f)-[r:ACTED_IN { roles: ['relationship.priority']}]->(g)")
                 .ToString();
             
             await ExecuteAsync(cypher, new Dictionary<string, object> {{"relationships", ParameterSerializer.ToDictionary(relationships)}});
@@ -151,7 +146,7 @@ namespace BrainStormHackathon.Infrastructure.Services.Neo4J
             var cypher = new StringBuilder()
                 .AppendLine("UNWIND $relationships AS relationship")
                 .AppendLine("MATCH (f:Flow {id: relationship.flowId}), (v:Video {id: relationship.videoId})")
-                .AppendLine("MERGE (f)-[r:DIRECTED]->(v)")
+                .AppendLine("Create (f)-[r:DIRECTED]->(v)")
                 .ToString();
 
             await ExecuteAsync(cypher, new Dictionary<string, object> {{"relationships", ParameterSerializer.ToDictionary(relationships)}});

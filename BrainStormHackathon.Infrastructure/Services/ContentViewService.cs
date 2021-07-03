@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using BrainStormHackathon.Application.Models;
 using BrainStormHackathon.Services.Interfaces;
@@ -8,14 +7,17 @@ namespace BrainStormHackathon.Infrastructure.Services
 {
     public class ContentViewService : IContentViewService
     {
-        public async Task<IEnumerable<ContentInfoDto>> SearchAsync(int userId, int videoId, string orderBy = "desc")
+        private readonly IContentReader _contentReader;
+
+        public ContentViewService(IContentReader contentReader)
         {
-            return Enumerable.Empty<ContentInfoDto>();
+            _contentReader = contentReader;
         }
 
-        public async Task<IEnumerable<ContentDto>> SearchByUserIdAsync(int userId, string orderBy = "desc")
-        {
-            return Enumerable.Empty<ContentDto>();
-        }
+        public async Task<IEnumerable<ContentInfoDto>> SearchAsync(int userId, int videoId, string orderBy = "desc") 
+            => await _contentReader.SearchAsync(userId, videoId, orderBy);
+
+        public async Task<IEnumerable<ContentDto>> SearchByUserIdAsync(int userId, string orderBy = "desc") 
+            => await _contentReader.SearchByUserIdAsync(userId, orderBy);
     }
 }
