@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  neo4j:
+    image: bitnami/neo4j:latest
+    ports:
+      - '7474:7474'
+      - '7473:7473'
+      - '7687:7687'
+    environment:
+      #NEO4J_USERNAME neo4j
+      NEO4J_PASSWORD: bitnami
+      NEO4J_HOST: localhost
+      
+  api:
+    build:
+     context: .
+     dockerfile: ./BrainStormHackathon.Api/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:5001
+      - Neo4J:boltUrl=bolt://neo4j:7687
+      - Neo4J:httpUrl=http://neo4j:7474
+      - Neo4J:username=neo4j
+      - Neo4J:password=bitnami
+    ports:
+      - 5001:5001
+    restart: unless-stopped
+    depends_on:
+      - neo4j
+      
+      

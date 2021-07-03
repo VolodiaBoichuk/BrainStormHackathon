@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrainStormHackathon.Applica
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrainStormHackathon.Infrastructure", "BrainStormHackathon.Infrastructure\BrainStormHackathon.Infrastructure.csproj", "{3496C387-83A6-47B0-8228-FE53C975A838}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrainStormHackathon.Domain", "BrainStormHackathon.Domain\BrainStormHackathon.Domain.csproj", "{9ADB1B4C-230F-4F20-86D3-612C46785305}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{3496C387-83A6-47B0-8228-FE53C975A838}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3496C387-83A6-47B0-8228-FE53C975A838}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3496C387-83A6-47B0-8228-FE53C975A838}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9ADB1B4C-230F-4F20-86D3-612C46785305}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9ADB1B4C-230F-4F20-86D3-612C46785305}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9ADB1B4C-230F-4F20-86D3-612C46785305}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9ADB1B4C-230F-4F20-86D3-612C46785305}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
